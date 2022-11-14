@@ -1,3 +1,52 @@
 %%[
---colocar o codigo aqui--
+var @subscriberkEY, @id_conta, @segmento, @id_dono, @email_dono, @nome_dono , @nome_segmento
+
+set @subscriberKey = AttributeValue("subscriberKey")
+set @id_conta = Lookup("Account_Salesforce", "id", "PersonContactID", @subscriberKey)
+set @segmento = Lookuprows("FinancialAccount__c__Salesforce", "AccountId__c", @id_conta, ""status__c, "ATIVA")
+
+set @value = "Integration"
+
+if rowcount(@segmento) > 0 then
+  set @seg = 4
+  
+  for @i = 1 to rowcount(@segmento) do 
+    if field(row(@segmento, @i), "CRMSegment__c") == "BtoC" and @seg > 1 then
+      set @seg = 1
+      set @id_dono = field(row(@segmento, @i), "OwnerId")
+      
+    elseif field(row(@segmento, @i), "CRMSegment__c") == "Orientador" and @seg > 2 then
+      set @seg = 2
+      set @id_dono = field(row(@segmento, @i), "OwnerId")
+      
+    elseif field(row(@segmento, @i), "CRMSegment__c") == "BtoB" and @seg > 3 then
+      set @seg = 3
+      set @id_dono = field(row(@segmento, @i), "OwnerId")
+      
+  
+    endif
+  next @i
+  
+  set @email_dono = Lookup("User_Salesforce", "Email", "Id", @id_dono)
+  set @nome_dono = Lookup ("User_Salesforce", "Name", "Id", @id_dono)
+  
+  if (@seg == 1 or @seg == 2) then 
+    if @nome_dono = "Iz Moreira" then
+    set @fromEmailAddr = "izmoreira@email.com"
+    
+    elseif IndexOf(@nome_dono, @value) > 0 then
+    set @fromEmailAddr = "geral@email.com"
+    
+    elseif (not empty(@nome_dono) and @nome_dono != "Iz Moreira") then
+    set @fromEmailAddr = @email_dono
+    
+    else
+    set @fromEmailAddr = "geral@email.com"
+    
+  endif
+  
+  else
+  set @fromEmailAddr = "naoecliente@email.com" --Se não achar a conta do usuario na base 
 ]%%
+
+%%=v(@fromEmailAddr)=%%
