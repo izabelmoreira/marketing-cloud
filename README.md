@@ -6,7 +6,6 @@ Esse Repositório foi criado para compartilhar códigos simples e úteis, e auxi
 Segue descrição abaixo de cada arquivo:
 
 - Dynamic Sender - Sender Dinâmico utilizado para envio de e-mails (AMPScript)
-- Dynamic Table - Tabela dinâmica pode ser utilizada em e-mails e LPs (AMPScript)
 - Form1 CRUD - Formulário simples com opções de Consultar, Adicionar e Deletar registros de uma Data Extension (HTML, BOOTSTRAP, AMPSCRIPT)
 
 
