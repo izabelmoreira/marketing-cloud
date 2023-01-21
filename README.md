@@ -3,7 +3,7 @@ Repositório de códigos úteis Marketing Cloud - Salesforce
 
 Esse Repositório foi criado para compartilhar códigos simples e úteis, e auxiliar a comunidade de desenvolvedores Marketing Cloud - Salesforce com algumas soluções que implementei.
 
-Segue descrição abaixo de cada implementação.
+Segue descrição abaixo de cada arquivo:
 
 - Dynamic Sender - Sender Dinâmico utilizado para envio de e-mails (AMPScript)
 - Dynamic Table - Tabela dinâmica pode ser utilizada em e-mails e LPs (AMPScript)
