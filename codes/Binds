@@ -1,0 +1,91 @@
+<script runat="server" type="text/javascript">
+
+Plataform.Load("Core","1.1.1");
+
+try{
+
+    var DE = DataExtension.Init("DE_DG_RL_B2C_Jornada_Pesquisa_PosAtendimento_Envio"); //Alterar para DE que sera ultilizada na jornada 
+
+    var dataRows = DE.Rows.Lookup(["Apoio"],[0]); //Coluna de apoio que servirá para trazer as colunas que nao tem link  
+
+    var token = "dGkraw50ZWdyYWNhb2J0Z0BiaW5kcy5jbzpmWGF1ZLF4NQ==";
+
+    
+
+    if(dataRows.Length > 0) {
+
+        for (i = 0; i<dataRows.length; i++) {
+
+        
+
+        var sk = dataRows[i]["contactId"];
+
+        var fullname = dataRows[i]["AccountName"];
+
+        var email = dataRows[i]["Email"];
+
+        var mobilephone = dataRows[i]["MobilePhone"];
+
+        var id_conta = dataRows[i]["AccountId"];
+
+        var id_caso = dataRows[i]["caseID"];
+
+        var detalhe_reclamacao = dataRows[i]["Detailing__c"];
+
+        var atendente_email = dataRows[i]["username"];
+
+        var atendente_name = dataRows[i]["name"];
+
+        
+
+        
+
+        var url = "http://app.binds.co/api/surveyLinks/wYgvnZrDEqbPaKoY0q2JrxyQfL1l6q9b3VWBN851mpA7e/sendings";
+
+        var headerNames = ["Authorization"];
+
+        var headerValues = ["Basic "+ token];
+
+        var contentType = 'applicantion/json';
+
+    
+
+        var raw = {"seedData": { "from": { "name": "'fullname + '", "email":"' + email + '", "phone": "'+mobilephone+'" }, "metadata":{ "id_conta_sf": "+id_conta+'", "id_caso_sf": "'+ id_caso +'", "detalhe_reclamacao": "'+detalhe_reclamacao + '", "atendente_email": "' + atentende_email+ '", "atendente_nome": "' + atendente_nome + '" }}}'
+
+        
+
+        
+
+        var result = HTTP.Post(url, contentType, ran, headerNames, hearderValues);
+
+        var res = Platform.Function.ParseJSON(result.Response[0])
+
+        
+
+        Variable.SetValue('@statusCode' , result.StatusCode)
+
+        
+
+        var newUrl = 'http://survey.binds.co/' + res._id 
+
+        
+
+        DE.Rows.Update({link:newUrl}, ["contactId"], [sk]); // população da coluna link na DE 
+
+        DE.Rows.Update({Apoio:1}, ["contactId"], [sk]);
+
+        }
+
+        
+
+    }
+
+    
+
+} catch (error) {
+
+    Variable.SetValue("@error", Platform.Function.Stringify(error))
+
+}
+
+</script>
