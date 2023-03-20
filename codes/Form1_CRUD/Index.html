@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>Modelo Form1 - Marketing Cloud</title>
+    <title> Form1 Sample - Marketing Cloud</title>
 </head>
 <style>
     .title img {
@@ -100,41 +100,41 @@
                         set @submit == RequestParameter('submit')
 
                         if not empty(@submit) then 
-                            InsertDE('DE_FORM1_HISTORICO_LOGS', "firstname", @Firstname, "Email", @email, "accountID", @accountID, "status", @status, "writeTimeStamp", @addedDate, "acao", @submit)
+                            InsertDE('DE_FORM1_LOGS_BACKUP', "firstname", @Firstname, "Email", @email, "accountID", @accountID, "status", @status, "writeTimeStamp", @addedDate, "action", @submit)
                         endif
 
-                        if @submit = 'consultar' then
+                        if @submit = 'get' then
 
                             var @rows, @row, @rowCount
                             set @rows = LookupRows("DE_FORM1", "Subscriberkey", @subscriberkey)
                             set @rowCount = rowCount(@rows)
 
                             if @rowCount > 0 then
-                                set @mensagem = 'Esse registro existe na base Form1'
+                                set @msg = 'Esse registro existe na base Form1'
 
                              else
 
-                                set @mensagem = 'Esse registro não existe na base form1'
+                                set @msg = 'Esse registro não existe na base form1'
                             endif
                         
-                        elseif @submit == 'adicionar' then
+                        elseif @submit == 'add' then
                             set @rows = LookupRows("DE_FORM1", "Subscriberkey", @subscriberkey)
                             set @rowCount = rowCount(@rows)
 
                             if @rowCount > 0 then
-                             set @mensagem = 'Esse registro existe na base Form1'
+                             set @msg = 'This record doesn't exists in Form1 DE'
 
                             else
 
                              InsertDE('DE_FORM1', "firstname", @Firstname, "Email", @email, "accountID", @accountID, "status", @status, "writeTimeStamp", @addedDate)
-                             set @mensagem = 'Os dados acima foram adicionados na base do form1'
+                             set @msg = 'The records were added in Form1 DE'
                         endif
 
 
-                        elseif @submit == 'deletar' then
+                        elseif @submit == 'delete' then
 
                             DeleteDE('DE_FORM1', subscriberkey, @subscriberkey)
-                            set @mensagem = 'Os dados acima foram deletados da base form1'
+                            set @msg = 'The records above were deleted from Form1 DE'
 
                         endif
 
@@ -159,21 +159,21 @@
                     <div class="col-sm-1">
                         <div class="btn-block">
                             <button class="btn btn-primary" type="submit" name="submit"
-                                value="consultar">Consultar</button>
-                            <input type="hidden" id="consultar" name="consultar">
+                                value="get">get</button>
+                            <input type="hidden" id="get" name="get">
                         </div>
                     </div>
                     <div class="col-sm-1">
                         <div class="btn-block">
                             <button class="btn btn-primary" type="submit" name="submit"
-                                value="adicionar">Adicionar</button>
-                            <input type="hidden" id="adicionar" name="adicionar">
+                                value="add">add</button>
+                            <input type="hidden" id="add" name="add">
                         </div>
                     </div>
                     <div class="col-sm-1">
                         <div class="btn-block">
-                            <button class="btn btn-primary" type="submit" name="submit" value="deletar">Deletar</button>
-                            <input type="hidden" id="deletar" name="deletar">
+                            <button class="btn btn-primary" type="submit" name="submit" value="delete">delete</button>
+                            <input type="hidden" id="delete" name="delete">
                         </div>
                     </div>
                     <div class="col-sm-7"></div>
@@ -183,7 +183,7 @@
                     <div class="col-sm-1"></div>
                     <div class="col-sm-8">
                         <div class="alert alert-secondary" role="alert">
-                            <b>%%=v(mensagem)=%%</b>
+                            <b>%%=v(msg)=%%</b>
                         </div>
                     </div>
                 </div>
