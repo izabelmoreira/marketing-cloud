@@ -4,13 +4,11 @@ Plataform.Load("Core","1.1.1");
 
 try{
 
-    var DE = DataExtension.Init("DE_DG_RL_B2C_Jornada_Pesquisa_PosAtendimento_Envio"); //Alterar para DE que sera ultilizada na jornada 
+    var DE = DataExtension.Init("DE_NameofDE_Send"); //Data Extension used in the journey
 
-    var dataRows = DE.Rows.Lookup(["Apoio"],[0]); //Coluna de apoio que servirá para trazer as colunas que nao tem link  
+    var dataRows = DE.Rows.Lookup(["value"],[0]); //Random unique value to return the columns with the link 
 
-    var token = "dGkraw50ZWdyYWNhb2J0Z0BiaW5kcy5jbzpmWGF1ZLF4NQ==";
-
-    
+    var token = "dGkrpeg50ZWporWNhb2J9r9BiaW5kcy5jmkjMiGF1ZLD7KL=="; //Token provided by the integrated research company
 
     if(dataRows.Length > 0) {
 
@@ -26,21 +24,17 @@ try{
 
         var mobilephone = dataRows[i]["MobilePhone"];
 
-        var id_conta = dataRows[i]["AccountId"];
+        var accountID = dataRows[i]["AccountId"];
 
-        var id_caso = dataRows[i]["caseID"];
+        var caseID = dataRows[i]["caseID"];
 
-        var detalhe_reclamacao = dataRows[i]["Detailing__c"];
+        var detail = dataRows[i]["Detailing__c"];
 
-        var atendente_email = dataRows[i]["username"];
+        var username = dataRows[i]["username"];
 
-        var atendente_name = dataRows[i]["name"];
+        var name = dataRows[i]["name"];
 
-        
-
-        
-
-        var url = "http://app.binds.co/api/surveyLinks/wYgvnZrDEqbPaKoY0q2JrxyQfL1l6q9b3VWBN851mpA7e/sendings";
+        var url = "http://app.platform.co/api/surveyLinks/wYgvnZrDEqbPaKoY0q2JrxyQfL1l6q9b3VWBN851mpA7e/sendings"; //link provided by the research company
 
         var headerNames = ["Authorization"];
 
@@ -48,35 +42,24 @@ try{
 
         var contentType = 'applicantion/json';
 
-    
+        var raw = {"seedData": { "from": { "name": "'fullname + '", "email":"' + email + '", "phone": "'+mobilephone+'" }, "metadata":{ "accountID_sf": "+accountID+'", "caseID_sf": "'+ caseID +'", "detail_sf": "'+detail + '", "usernamesf": "' + username+ '", "namesf": "' + name + '" }}}'
 
-        var raw = {"seedData": { "from": { "name": "'fullname + '", "email":"' + email + '", "phone": "'+mobilephone+'" }, "metadata":{ "id_conta_sf": "+id_conta+'", "id_caso_sf": "'+ id_caso +'", "detalhe_reclamacao": "'+detalhe_reclamacao + '", "atendente_email": "' + atentende_email+ '", "atendente_nome": "' + atendente_nome + '" }}}'
-
-        
-
-        
 
         var result = HTTP.Post(url, contentType, ran, headerNames, hearderValues);
 
         var res = Platform.Function.ParseJSON(result.Response[0])
 
-        
-
         Variable.SetValue('@statusCode' , result.StatusCode)
 
-        
+    
+        var newUrl = 'http://survey.platform.co/' + res._id 
 
-        var newUrl = 'http://survey.binds.co/' + res._id 
+        DE.Rows.Update({link:newUrl}, ["contactId"], [sk]); // populate the link column in the DE
 
-        
-
-        DE.Rows.Update({link:newUrl}, ["contactId"], [sk]); // população da coluna link na DE 
-
-        DE.Rows.Update({Apoio:1}, ["contactId"], [sk]);
+        DE.Rows.Update({value:1}, ["contactId"], [sk]);
 
         }
-
-        
+  
 
     }
 
