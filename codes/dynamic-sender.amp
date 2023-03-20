@@ -46,7 +46,7 @@ if rowcount(@segment) > 0 then
   endif
   
   else
-  set @fromEmailAddr = "noreply@email.com" --Se não achar a conta do usuario na base 
+  set @fromEmailAddr = "noreply@email.com" //If accountID was not found
 ]%%
 
 %%=v(@fromEmailAddr)=%%
