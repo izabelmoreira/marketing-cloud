@@ -1,0 +1,13 @@
+<!-- Day 1 Challenge -->
+
+%%[
+set @FirstName = ProperCase(Firstname)
+]%%
+
+@FirstName
+
+OR
+
+%%=ProperCase(@FirstName)=%%
+
+
