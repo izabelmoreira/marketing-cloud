@@ -9,6 +9,7 @@ Below is a description of each file:
 - runAutomation - Automation Studio Script Activity that runs a specific automation, can be used to run automation in intervals of less than 1 hour - which is the default of Schedule (Javascript)
 - Form1 CRUD - Simple form with options to Query, Add and Delete records from a Data Extension (HTML, BOOTSTRAP, AMPSCRIPT)
 - ResearchPlatformIntegration - API created to send Marketing Cloud DE information to a Research Platform (Javascript)
+- AMPScript30 - 30-day AMPscript coding challenge and improve your coding skills while learning the fundamentals.
 
 
 
