@@ -1,13 +1,11 @@
 <!-- Day 1 Challenge -->
 
 %%[
+var Firstname
+set AtributteValue("Firstname")
 set @FirstName = ProperCase(Firstname)
 ]%%
 
-@FirstName
-
-OR
-
-%%=ProperCase(@FirstName)=%%
+Hello %%=v(@firstName)=%%,
 
 
