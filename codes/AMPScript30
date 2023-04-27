@@ -9,3 +9,41 @@ set @FirstName = ProperCase(Firstname)
 Hello %%=v(@firstName)=%%,
 
 
+<!-- Day 2 Challenge -->
+
+%%[
+var @fullname, @datetime
+set @fullname = AttributeValue("fullname")
+set @datetime = AttributeValue("datetime")
+
+set @formatDateTime = formatDate(@datetime, yyyy-mm-dd)
+
+]%%
+
+Hello %%=ProperCase(@fullname)=%%, 
+Your renewal expire on %%=@formatDateTime=%%.
+
+<!-- or  -->
+
+%%[
+var @fullname, @datetime
+set @fullname = AttributeValue("fullname")
+set @formatDateTime = formatDate(Add(Now(1),30,"D"), yyyy-mm-dd)
+
+]%%
+
+Hello %%=ProperCase(@fullname)=%%, 
+Your renewal expire on %%=@formatDateTime=%%.
+
+<!-- or  -->
+
+%%[
+var @fullname, @datetime
+set @fullname = AttributeValue("fullname")
+set @datetime = DateAdd(Now(1),30,"D")
+set @formatDateTime = formatDate(@datetime, yyyy-mm-dd)
+
+]%%
+
+Hello %%=ProperCase(@fullname)=%%, 
+Your renewal expire on %%=@formatDateTime=%%.
