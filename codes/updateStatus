@@ -1,0 +1,45 @@
+
+%%[
+var @rows, @rowcount, @counter, @subscriberkey, @email, @status
+
+//'Ampscript' is a field that I created in the Data Extension to control the loop, the default value is 1
+set @rows = LookupRows("dataExtension_name","Ampscript", '1') 
+set @rowCount = rowcount(@rows) 
+
+if @rowCount > 0 then 
+
+//Loop to get the contacts from the Data Extension
+for @counter = 1 to @rowCount do 
+set @row = row(@rows, @counter) 
+set @subscriberkey = field(@row,"Subscriberkey") 
+set @email = field(@row,"EmailAddress") 
+
+//API Object to change the status
+set @sub = CreateObject("Subscriber")
+SetObjectProperty(@sub, "EmailAddress", @email)
+SetObjectProperty(@sub, "SubscriberKey", @subscriberkey)
+SetObjectProperty(@sub, "Status", "Unsubscribed")
+
+set @updateOptions = CreateObject("UpdateOptions")
+set @saveOptions = CreateObject("SaveOption")
+SetObjectProperty(@saveOptions,"SaveAction","UpdateAdd")
+SetObjectProperty(@saveOptions,"PropertyName","*")
+AddObjectArrayItem(@updateOptions,"SaveOptions", @saveOptions)
+
+set @updateStatusCode = InvokeUpdate(@sub, @updateStatusMessage, @updateErrorCode, @updateOptions)
+
+]%%
+
+//Check the status of the change
+updateStatusCode: %%=v(@updateStatusCode)=%%
+<br>updateStatusMessage: %%=v(@updateStatusMessage)=%%
+<br>updateErrorCode: %%=v(@updateErrorCode)=%%
+
+%%[ next ]%% 
+
+%%[ else ]%% 
+
+No items to display 
+
+%%[ endif ]%%
+
