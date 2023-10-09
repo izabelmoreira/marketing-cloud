@@ -10,6 +10,7 @@ Below is a description of each file:
 - Form1 CRUD - Simple form with options to Query, Add and Delete records from a Data Extension (HTML, BOOTSTRAP, AMPSCRIPT)
 - ResearchPlatformIntegration - API created to send Marketing Cloud DE information to a Research Platform (Javascript)
 - AMPScript30 - 30-day AMPscript coding challenge and improve your coding skills while learning the fundamentals.
+- Change Subscriber Status (from Data Extension) via Ampscript 
 
 
 
