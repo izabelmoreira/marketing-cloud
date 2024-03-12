@@ -1,0 +1,48 @@
+/* Begin Token Refresh Logic */
+const context = pm.environment.name ? pm.environment : pm.collectionVariables;
+
+const tokenRefreshTime = context.get("dne_tokenRefreshTime") || 0;
+console.log("Token refresh time: " + tokenRefreshTime);
+
+const tokenAge = Math.round((((Date.now() - tokenRefreshTime) % 86400000) % 3600000) / 60000);
+
+if (tokenAge == 16) {
+    console.log("Token is valid");
+} else {
+    console.log("Refreshing token...");
+    context.set("dne_tokenRefreshTime", Date.now());
+
+    const authRequest = {
+        url: 'https://api.sitescout.com/oauth/token',
+        method: 'POST',
+        headers: [{ key: 'Content-Type', value: 'application/x-www-form-urlencoded' }],
+        body: {
+            mode: 'raw',
+            raw: JSON.stringify({
+                "grant_type": "client_credentials",
+                "client_id": context.get("et_clientId"),
+                "client_secret": context.get("et_clientSecret")
+            })
+        }
+    };
+
+    pm.sendRequest(authRequest, (err, res) => {
+        if (err === null) {
+            const contentType = res.headers.get('Content-Type');
+            if (contentType && contentType.includes('application/x-www-form-urlencoded')) {
+                const responseJson = res.json();
+                if (responseJson && responseJson.access_token) {
+                    context.set('dne_etAccessToken', responseJson.access_token);
+                    console.log("Success: Token refreshed");
+                } else {
+                    console.error("Failed: Invalid response format. Access token not found in response.", responseJson);
+                }
+            } else {
+                console.error("Failed: Unexpected response format. Expected JSON.", res.body);
+            }
+        } else {
+            console.error("Failed: Token refresh", err);
+        }
+    });
+}
+/* End Token Refresh Logic */
